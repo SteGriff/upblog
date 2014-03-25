@@ -1,7 +1,7 @@
 # Upblog
 
-**Up**load Mark**down** to make a **blog**, see.  
-It's basically **Ghost** for PHP with no built-in editor.
+Upload Markdown to make a blog, see? **Upblog**.
+It's like **Ghost** for PHP with no built-in editor.
 
 ## So You Want to Write Markdown and Upload it to Make a Blog
 
@@ -49,7 +49,8 @@ Arranging posts by date would be good
 
 ## License
 
-For License information, see LICENSE.txt
+For License information, see LICENSE.txt  
+
 **php-markdown** is courtesy of [Michel Fortin](https://github.com/michelf/) - see php-markdown/License.md for details.
 
 -----
