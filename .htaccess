@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . /upblog/index.php [L]
+
+AddType text/cache-manifest .appcache
