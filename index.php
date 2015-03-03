@@ -1,15 +1,19 @@
 <?php
 //Use Michel's Markdown parser
-require "php-markdown/Michelf/Markdown.php";
+require 'php-markdown/Michelf/Markdown.php';
 
 //Upbloggy functions
 require 'upblog.php';
 
+//Globals for rendering - populated by deploy();
 //Global for making post render in the template
 $UPBLOG = '';
-
-//Global for page titles
 $TITLE = '';
+$DESCRIPTION = '';
+$IMAGE_SRC = '';
+$URL = '';
+$SITE_ROOT = site_root();
+$TEMPLATE = '';
 
 // ----- A wild REQUEST appears! -----
 
@@ -33,5 +37,5 @@ if (!deploy($filename)){
 } 
 
 //Render the template (the template should render the blog post by echoing $UPBLOG variable)
-require 'master.php';
+require $TEMPLATE;
 ?>

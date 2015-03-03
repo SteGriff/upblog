@@ -37,4 +37,10 @@ const SPECIAL = 'special/';
 //	Page not found (default: No such post)
 const SP_PAGE_NOT_FOUND = 'no-such-post';
 
+/*
+	The folder relative to index.php where templates are kept
+	Searched for a template with the same file name (before extension)
+	as a post, or else master.php is used. It must contain a master.php.
+*/
+const TEMPLATES = 'templates/'
 ?>

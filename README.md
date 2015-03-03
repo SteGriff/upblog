@@ -21,16 +21,22 @@ If you don't want upblog errors to display, make some CSS (in the master templat
 Write a `test.md` file or use this README (rename it `test.md`). Upload it to your `posts/` directory as configured in `config.php`.
 Now, in the browser, go to `your-site.com/blog/test`, except replace `your-site.com` with your domain name and `blog/` with whatever you put in `config.php:BLOG_ROOT` of course!
 
-## Master Template
+## Templates
 
-**Upblog** is designed to use just one master template; `master.php`. A simple template is provided. You can mess around with this as much as you want to, but it must echo the `$UPBLOG` variable:
+**Upblog** looks in `~/templates` and if it finds a template matching the name of the page (e.g. 'index.php' for 'index.md') then it will use that. Otherwise it uses the `master.php` file in the templates directory.  
+  
+You can configure the location of the templates directory in `config.php`
+
+A template can make use of the following variables to output post content and metadata:
 
 	<?=$UPBLOG?> //Render the post
-	//N.b. this is the shortest echo syntax, but you can do it any other way.
+	//N.b. this is the shortest PHP echo syntax, but you can do it any other way.
 	
 Other, optional master variables:
 
 	<?=$TITLE?> //Put it in the page <title> if you feel like it
+	<?=nav(6)?> //Output an <ul> of nav items. Optional limit as parameter.
+	<?=summaries(10)?> //Output the summaries of recent posts. Optional limit.
 
 ## How it works
 
@@ -42,10 +48,7 @@ Write your blog posts in Markdown. Name them with the post title in lowercase wi
 
 	some-thoughts-on-blogging.md
 	index.md
-	
-## To do
 
-Arranging posts by date would be good
 
 ## License
 
