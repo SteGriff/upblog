@@ -73,10 +73,7 @@ function get_template($md_file)
 	$file_without_extension = str_replace('.md', '', $md_file);
 	$filename = template($file_without_extension);
 	$filename = existing($filename);
-	
-	$log = "$file_without_extension\r\n$filename\r\n$filename\r\n";
-	file_put_contents('log.txt', $log);
-	
+		
 	if ($filename)
 	{
 		return $filename;
@@ -117,18 +114,15 @@ function existing($f){
 }
 
 function title_of($filename){
-	$h = fopen($filename, 'r');
-	
-	//Get first line
-	$line = fgets($h);
-	
-	//Look through the file for a line starting with '#'
-	while(!feof($h) && $line[0] != '#'){
-		$line = fgets($h);
-	}
-	
-	if ($line[0] == '#'){
-		return trim(substr($line, 1));
+	$content = file_get_contents($filename);
+	$content_md = Markdown::defaultTransform($content);
+	$content_doc = phpQuery::newDocument($content_md);
+
+	$title = $content_doc['h1']->getString()[0];
+
+	if($title != null && $title != '')
+	{
+		return $title;
 	}
 	else{
 		//No heading found, return what the user typed
@@ -203,6 +197,43 @@ function posts()
 	return $posts;
 }
 
+function date_difference($postedTime)
+{
+	$posted = new DateTime("@$postedTime");
+	
+	$today_ts = strtotime('today');
+	$today = new DateTime("@$today_ts");
+
+	$difference = $today->diff($posted);
+
+	if ($difference->days == 0)
+	{
+		return "Today";
+	}
+	elseif ($difference->days == 1)
+	{
+		return "Yesterday";
+	}
+	
+	$ds = [];
+	if ($difference->m == 1)
+	{
+		$ds[] = $difference->m . ' month';
+	}
+	elseif ($difference->m > 1)
+	{
+		$ds[] = $difference->m . ' months';
+	}
+	
+	if ($difference->d > 0)
+	{
+		$ds[] = $difference->d . ' days';
+	}
+	
+	$dateString = implode(', ', $ds) . ' ago';
+	return $dateString;
+}
+
 function nav($limit)
 {
 	//Get posts and sort by modified time (desc)
@@ -216,24 +247,9 @@ function nav($limit)
 	foreach($keys as $key)
 	{
 		$post = $posts[$key];
-		//Find difference in timestamps from post modified to now
-		//Divide by 86400 seconds in a day, and floor
-		$daysDiff = floor((time() - $post['modified']) / 86400);
 		
-		if ($daysDiff < 1)
-		{
-			$daysDiff = 'Today';
-		}
-		elseif ($daysDiff < 2)
-		{
-			$daysDiff = 'Yesterday';
-		}
-		else
-		{
-			$daysDiff = "$daysDiff days ago";
-		}
-		
-		$nav_html .= "<li><a href=\"{$post['link']}\">{$post['title']} <small>({$daysDiff})</small></a></li>\n";
+		$daysDiff = date_difference($post['modified']);
+		$nav_html .= "<li><a href=\"{$post['link']}\">{$post['title']} <small>($daysDiff)</small></a></li>\n";
 		
 		//Stop processing if we reach the 'limit' argument
 		if ($limit)
@@ -304,6 +320,9 @@ function twitter_card()
 //Get URI of the the markdown file for the blog post with the given name
 // Looks in the POSTS folder for that file
 function blog_md_file($pageName){
+	//If sent to a directory root, use index.md
+	if(last_char($pageName) == '/'){ $pageName .= 'index'; }
+	
 	return POSTS . $pageName . '.md';
 }
 
@@ -318,6 +337,11 @@ function special_md_file($pageName){
 function error($message, $level = 1){
 	global $UPBLOG;
 	$UPBLOG .= "<h$level class='upblog-error'><small>Upblog Error:</small> $message</h$level>";
+}
+
+function last_char($s)
+{
+	return $s[strlen($s) - 1];
 }
 
 //Get the whole scheme+host+url of the directory from which Upblog runs

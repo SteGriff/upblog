@@ -1,0 +1,11 @@
+# After initial commit, ignore subsequent added posts and templates
+/posts/*
+/templates/*
+
+# SG
+# testing files
+/test/*
+
+# my website things
+sgn*.*
+*.bak
