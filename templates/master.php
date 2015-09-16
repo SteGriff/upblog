@@ -1,23 +1,21 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Upblog - <?=$TITLE?></title>
+<title>My Blog - <?=$TITLE?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <?=twitter_card()?>
 
 <link rel="shortcut icon" href="/favicon.ico" />
-<link rel="stylesheet" type="text/css" href="/sgn_style.css" />
-<link rel="stylesheet" type="text/css" href="/upblog/sgn_blog.css" />
 
 </head>
 <body>
 
-	<header class="beige">
-		<h1><a href="/">SteGriff</a></h1>
-		<h2><a href="/upblog">Blog</a></h2>
-		<nav class="olive">
+	<header>
+		<h1><a href="/">My Blog</a></h1>
+		
+		<nav>
 			<ul>
 				<?=nav(6)?>
 			</ul>
@@ -29,11 +27,8 @@
 	</article>
 	
 	<footer>
-		<p><time>2014</time> SteGriff - Stephen Griffiths</p>
+		<p>By me</p>
 	</footer>
-	
-	<script type="text/javascript">
-	document.getElementsByTagName("time")[0].innerHTML = new Date().getFullYear();
-	</script>
+
 </body>
 </html>

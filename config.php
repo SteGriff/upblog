@@ -7,7 +7,7 @@
 	For 'example.com/MyFirstPost' it is 'example.com/'
 	Default: upblog/
 */
-const BLOG_ROOT = 'upblog/';
+const BLOG_ROOT = 'uptest/';
 
 /*
 	The folder relative to index.php where posts are kept.

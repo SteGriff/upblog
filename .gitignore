@@ -2,10 +2,6 @@
 /posts/*
 /templates/*
 
-# SG
+# ----- SG -----
 # testing files
 /test/*
-
-# my website things
-sgn*.*
-*.bak
