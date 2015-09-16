@@ -4,7 +4,7 @@ use \Michelf\Markdown;
 //URL and Directory setups
 require 'config.php';
 require_once 'php-markdown/Michelf/Markdown.php';
-require_once 'phpQuery/phpQuery.php';
+require_once 'php-query/phpQuery.php';
 
 //Oh hey look it's the deploy function
 // Puts the HTML payload of the selected Markdown file into the special $UPBLOG global,

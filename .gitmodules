@@ -1,7 +1,7 @@
 [submodule "php-markdown"]
 	path = php-markdown
 	url = https://github.com/michelf/php-markdown
-	
-[submodule "phpQuery"]
-	path = phpQuery
-	url = https://github.com/TobiaszCudnik/phpquery
+
+[submodule "php-query"]
+	path = php-query
+	url = https://github.com/stegriff/php-query
