@@ -7,6 +7,7 @@ require_once 'php-markdown/Michelf/Markdown.php';
 require_once 'php-query/phpQuery.php';
 require 'upblog/summary.php';
 require 'upblog/title.php';
+require 'upblog/posts.php';
 require 'posts-cache.php';
 
 //Oh hey look it's the deploy function
@@ -88,12 +89,6 @@ function get_template($md_file)
 	}
 }
 
-function manifest($name)
-{
-	//Get matching json file
-	return str_ireplace('.md', '.json', $name);
-}
-
 //Get the requested blog post title from the URI:
 // The entirety of the URL after BLOG_ROOT is found
 // http://blog.com/upblog/NewSchool -> NewSchool
@@ -123,58 +118,6 @@ function existing($f){
 	}
 }
 
-function cache_posts()
-{
-	$posts = rebuild_posts();
-	$posts_cache_file_content = '<?php $posts = ' . var_export($posts, true) . ';';
-	file_put_contents('posts-cache.php', $posts_cache_file_content);
-}
-
-//Returns an associative array of all posts
-// based on current file system state
-function rebuild_posts()
-{
-	$posts = [];
-
-	//Index all posts by modification date
-	foreach(glob(POSTS . '*') as $file) 
-	{
-		if (dir($file))
-		{
-			continue;
-		}
-		
-		$modified = filemtime($file);
-		
-		//Store posts by their modified time
-		// but if the slot is taken, we just keep going up until
-		// there is an empty slot.
-		$storageTime = $modified;
-		while (isset($posts[$storageTime])){
-			$storageTime++;
-		}
-		
-		//Put together a post information object
-		$postInfo = [
-			"file" => $file,
-			"link" => basename($file, '.md'),
-			"title" => title_of_file($file),
-			"modified" => $modified,
-			"key" => $storageTime
-		];
-		
-		//Store it under the agreed key
-		$posts[$storageTime] = $postInfo;
-	}
-	
-	return $posts;
-}
-
-function manage_post_metadata($filename)
-{
-	
-}
-
 function date_difference($postedTime)
 {
 	$posted = new DateTime("@$postedTime");
@@ -186,11 +129,11 @@ function date_difference($postedTime)
 
 	if ($difference->days == 0)
 	{
-		return "Today";
+		return 'Today';
 	}
 	elseif ($difference->days == 1)
 	{
-		return "Yesterday";
+		return 'Yesterday';
 	}
 	
 	$ds = [];
