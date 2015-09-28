@@ -5,3 +5,4 @@
 # ----- SG -----
 # testing files
 /test/*
+log*.txt

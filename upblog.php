@@ -5,6 +5,9 @@ use \Michelf\Markdown;
 require 'config.php';
 require_once 'php-markdown/Michelf/Markdown.php';
 require_once 'php-query/phpQuery.php';
+require 'upblog/summary.php';
+require 'upblog/title.php';
+require 'posts-cache.php';
 
 //Oh hey look it's the deploy function
 // Puts the HTML payload of the selected Markdown file into the special $UPBLOG global,
@@ -20,20 +23,18 @@ function deploy($filename){
 	if ($filename){
 		//Open the chosen file
 		// (either the blog post or a special page) 
-		$handle = fopen($filename, 'r');
-		$content = fread($handle, filesize($filename));
-		fclose($handle);
+		$content = file_get_contents($filename);
 
-		//Get template based on filename (or use master)
-		$TEMPLATE = get_template($filename);
-		$DESCRIPTION = summary_of($filename);
-		
 		//Populate Markdown
 		// It's now the designer's job to echo $UPBLOG somewhere in the template page
 		$UPBLOG = Markdown::defaultTransform($content);
 		
+		//Get template based on filename (or use master)
+		$TEMPLATE = get_template($filename);
+		$DESCRIPTION = summary_of_current();
+		
 		// Designer can use the other vars, like $TITLE, if they want to.
-		$TITLE = title_of($filename);
+		$TITLE = title_of_current();
 		$URL = $_SERVER['SCRIPT_URI'];
 		
 		$IMAGE_SRC = '';
@@ -56,14 +57,16 @@ function deploy($filename){
 
 function template($name)
 {
-	$name = str_ireplace(POSTS, '', $name);
-	
+	//If argument given, translate POST dir to TEMPLATE dir
+	// to get corresponding template
 	if ($name)
 	{
+		$name = str_ireplace(POSTS, '', $name);
 		return TEMPLATES . $name . '.php';
 	}
 	else
 	{
+		//No arg, return default template
 		return TEMPLATES . 'master.php';
 	}
 }
@@ -71,17 +74,24 @@ function template($name)
 function get_template($md_file)
 {
 	$file_without_extension = str_replace('.md', '', $md_file);
-	$filename = template($file_without_extension);
-	$filename = existing($filename);
+	$filename = existing(template($file_without_extension));
 		
 	if ($filename)
 	{
+		//Template file found
 		return $filename;
 	}
 	else
 	{
+		//Not found, return master
 		return template();
 	}
+}
+
+function manifest($name)
+{
+	//Get matching json file
+	return str_ireplace('.md', '.json', $name);
 }
 
 //Get the requested blog post title from the URI:
@@ -113,53 +123,16 @@ function existing($f){
 	}
 }
 
-function title_of($filename){
-	$content = file_get_contents($filename);
-	$content_md = Markdown::defaultTransform($content);
-	$content_doc = phpQuery::newDocument($content_md);
-
-	$title = $content_doc['h1']->getString()[0];
-
-	if($title != null && $title != '')
-	{
-		return $title;
-	}
-	else{
-		//No heading found, return what the user typed
-		return requested_blog_post();
-	}
-}
-
-function summary_of($filename){
-	global $UPBLOG, $TITLE;
-	
-	//Open the file and read content
-	$h = fopen($filename, 'r');
-	$content = fread($h, filesize($filename));
-	fclose($h);
-
-	//Parse the md to html and select p tags
-	$htmlContent = Markdown::defaultTransform($content);
-	$doc = phpQuery::newDocument($htmlContent);
-	$textContent = $doc['p'];
-	
-	//Tidy up the text a bit
-	$textContent = trim(strip_tags($textContent));
-
-	//Stop at the space closest to 150 chars
-	$whenToStop = stripos($textContent, ' ', 150);
-	
-	$textContent = substr($textContent, 0, $whenToStop) . '...';
-	return $textContent;
-}
-
-//Generic date formatter, whatev, later, man...
-function d($d){
-	return date("F d Y H:i", $d);
+function cache_posts()
+{
+	$posts = rebuild_posts();
+	$posts_cache_file_content = '<?php $posts = ' . var_export($posts, true) . ';';
+	file_put_contents('posts-cache.php', $posts_cache_file_content);
 }
 
 //Returns an associative array of all posts
-function posts()
+// based on current file system state
+function rebuild_posts()
 {
 	$posts = [];
 
@@ -185,7 +158,7 @@ function posts()
 		$postInfo = [
 			"file" => $file,
 			"link" => basename($file, '.md'),
-			"title" => title_of($file),
+			"title" => title_of_file($file),
 			"modified" => $modified,
 			"key" => $storageTime
 		];
@@ -195,6 +168,11 @@ function posts()
 	}
 	
 	return $posts;
+}
+
+function manage_post_metadata($filename)
+{
+	
 }
 
 function date_difference($postedTime)
@@ -237,7 +215,7 @@ function date_difference($postedTime)
 function nav($limit)
 {
 	//Get posts and sort by modified time (desc)
-	$posts = posts();
+	global $posts;
 	$keys = array_keys($posts);
 	rsort($keys);
 	
@@ -263,37 +241,6 @@ function nav($limit)
 	}
 	
 	return $nav_html;
-}
-
-function summaries($limit)
-{
-	$posts = posts();
-	$keys = array_keys($posts);
-	rsort($keys);
-
-	$summaries_html = '';
-	
-	$i = 0;
-	foreach($keys as $k)
-	{	
-		$p = $posts[$k];
-		$summaries_html .= "
-		<section>
-			<h2><a href=\"{$p['link']}\">{$p['title']}</a></h2>
-			<p>" . summary_of($p['file']) . "</p>
-		</section>";
-		
-		if ($limit)
-		{
-			$i++;
-			if ($i >= $limit)
-			{
-				break;
-			}
-		}
-	}
-	
-	return $summaries_html;
 }
 
 function twitter_card()
