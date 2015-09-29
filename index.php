@@ -14,7 +14,7 @@ $IMAGE_SRC = '';
 $URL = '';
 $SITE_ROOT = site_root();
 $TEMPLATE = '';
-$DOC = null;
+$FILENAME = '';
 
 // ----- A wild REQUEST appears! -----
 

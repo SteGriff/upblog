@@ -27,6 +27,12 @@
 	</article>
 	
 	<footer>
+		<p>
+			Newer: <?=link_newer('This is the newest post')?>
+		</p>
+		<p>
+			Older: <?=link_older('This is the oldest post')?>
+		</p>
 		<p>By me</p>
 	</footer>
 

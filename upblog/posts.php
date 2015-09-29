@@ -7,7 +7,7 @@ function rebuild_posts()
 	$posts = [];
 
 	//Index all posts by modification date
-	foreach(glob(POSTS . '*') as $file) 
+	foreach(glob(POSTS . '*.md') as $file) 
 	{
 		if (dir($file))
 		{

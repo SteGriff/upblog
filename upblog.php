@@ -8,13 +8,14 @@ require_once 'php-query/phpQuery.php';
 require 'upblog/summary.php';
 require 'upblog/title.php';
 require 'upblog/posts.php';
+require 'upblog/links.php';
 require 'posts-cache.php';
 
 //Oh hey look it's the deploy function
 // Puts the HTML payload of the selected Markdown file into the special $UPBLOG global,
 // so that it can then be rendered by the master template by echoing $UPBLOG
 function deploy($filename){
-	global $UPBLOG, $TITLE, $URL, $DESCRIPTION, $IMAGE_SRC, $TEMPLATE;
+	global $UPBLOG, $TITLE, $URL, $DESCRIPTION, $IMAGE_SRC, $TEMPLATE, $FILENAME;
 	
 	$TEMPLATE = template('master');
 	
@@ -22,6 +23,9 @@ function deploy($filename){
 	$filename = existing($filename);
 	
 	if ($filename){
+		
+		$FILENAME = $filename;
+		
 		//Open the chosen file
 		// (either the blog post or a special page) 
 		$content = file_get_contents($filename);
