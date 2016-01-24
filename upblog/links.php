@@ -7,19 +7,24 @@ function link_to($newer, $fallback)
 {
 	global $posts, $FILENAME;
 
-	$p = reset($posts);
-	while ($p['file'] !== $FILENAME && $p !== false){
-		$p = next($posts);
-	}
+	$keys = array_keys($posts);
+	rsort($keys);
 	
-	if ($p === false)
+	$key = null;
+	foreach($keys as $key)
 	{
-		return "Current post is false?! Post not found?!";
+		$p = $posts[$key];
+		if ($p['file'] === $FILENAME || $p == null)
+		{
+			prev($keys);
+			break;
+		}
 	}
 	
-	$p = $newer ? next($posts) : prev($posts);
+	$key = $newer ? prev($keys) : next($keys);
+	$p = $posts[$key];
 	
-	if ($p === false)
+	if ($p === null)
 	{
 		return $fallback;
 	}
