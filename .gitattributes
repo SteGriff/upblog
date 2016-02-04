@@ -1,0 +1,6 @@
+﻿.gitignore merge=ours
+/templates/*.* merge=ours
+/posts/*.* merge=ours
+config.php merge=ours
+.htaccess merge=ours
+README.md merge=ours

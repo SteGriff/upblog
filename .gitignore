@@ -6,3 +6,4 @@
 # testing files
 /test/*
 log*.txt
+sgn_*.*
