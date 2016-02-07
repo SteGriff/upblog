@@ -22,16 +22,16 @@ function link_to($newer, $fallback)
 	}
 	
 	$key = $newer ? prev($keys) : next($keys);
-	$p = $posts[$key];
-	
-	if ($p === null)
+	if (isset($posts[$key]))
+	{
+		$p = $posts[$key];
+		return "<a href='{$p['link']}'>{$p['title']}</a>";
+	}
+	else
 	{
 		return $fallback;
 	}
-	else 
-	{
-		return "<a href='{$p['link']}'>{$p['title']}</a>";
-	}
+	
 }
 
 function link_newer($fallback)

@@ -14,6 +14,7 @@ function summary_of_file($filename)
 }
 
 function summary_of($content){
+	
 	//Parse the md to html and select p tags
 	$htmlContent = Markdown::defaultTransform($content);
 	$doc = phpQuery::newDocument($htmlContent);
@@ -22,14 +23,14 @@ function summary_of($content){
 	//Tidy up the text a bit
 	$textContent = trim(strip_tags($textContent));
 
-	//Stop at the space closest to 150 chars
-	$whenToStop = stripos($textContent, ' ', 150);
+	//Stop at the space closest to 200 chars (or whatever is configured)
+	$whenToStop = stripos($textContent, ' ', SUMMARY_LENGTH);
 	
 	$textContent = substr($textContent, 0, $whenToStop) . '...';
 	return $textContent;
 }
 
-function summaries($limit)
+function summaries($limit = null)
 {
 	global $posts;
 	$keys = array_keys($posts);

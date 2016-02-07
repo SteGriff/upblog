@@ -42,5 +42,11 @@ const SP_PAGE_NOT_FOUND = 'no-such-post';
 	Searched for a template with the same file name (before extension)
 	as a post, or else master.php is used. It must contain a master.php.
 */
-const TEMPLATES = 'templates/'
+const TEMPLATES = 'templates/';
+
+/*
+	How many characters to use in summaries (150 to 200 is a good start)
+*/
+const SUMMARY_LENGTH = 150;
+
 ?>

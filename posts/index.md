@@ -2,10 +2,12 @@
 
 ## Welcome!
 
-This is my new [Upblog](/upblog/about-upblog)-powered blog. I am writing the blog platform in repsonse to the needs of this blog! It's exciting. Hopefully, I will gradually move the best of my Wordpress blog across to here. You can still access it at [stegriff.wordpress.com](http://stegriff.wordpress.com)
+Well done for setting up your new Upblog-powered blog. Upblog is an open-source site generator for PHP. You can find out more at [Upblog on GitHub][1]
 
-The green navigation box shows you posts ordered by last update. I really wanted to create a platform where I could update a post to "bump" it to the top, because it's better for ongoing projects. To learn more about what I think makes upblog cool, please check out the [Upblog](/upblog/about-upblog) post :)
+This page is rendered on `templates/index.php` and other pages use `templates/master.php`
 
 To read the markdown source for this page, see [./posts/index.md](/upblog/posts/index.md)
 
-# Posts
+## Recent posts
+
+[1]: https://github.com/stegriff/upblog

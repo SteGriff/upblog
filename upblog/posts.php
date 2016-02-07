@@ -9,7 +9,7 @@ function rebuild_posts()
 	//Index all posts by modification date
 	foreach(glob(POSTS . '*.md') as $file) 
 	{
-		if (dir($file))
+		if (is_dir($file))
 		{
 			continue;
 		}
@@ -19,7 +19,7 @@ function rebuild_posts()
 		//Store posts by their modified time
 		// but if the slot is taken, we just keep going up until
 		// there is an empty slot.
-		$storageTime = filemtime($file);
+		$storageTime = $info['modified'];
 		while (isset($posts[$storageTime])){
 			//Files are traversed alphabetically
 			// so going back in time puts them in A-Z order
@@ -53,12 +53,14 @@ function metadata($filename)
 		$json = file_get_contents($manifest);
 		$info = json_decode($json, true);
 		
+		/*
 		//If file has been modified since metadata was built
 		if ($modified !== $info['modified'])
 		{
 			//Update metadata
 			$info['modified'] = $modified;
 		}
+		*/
 	}
 	else
 	{
