@@ -122,26 +122,33 @@ function existing($f){
 	}
 }
 
-function date_difference($postedTime)
-{
-	$posted = new DateTime("@$postedTime");
-	
-	$today_ts = strtotime('today');
-	$today = new DateTime("@$today_ts");
+function date_difference($posted)
+{	
+	$posted = DateTime::createFromFormat('U', $posted);
+	$today = new DateTime('today');
 
 	$difference = $today->diff($posted);
 
-	if ($difference->days == 0)
+	if ($difference->days === 0)
 	{
-		return 'Today';
+		return $difference->invert
+			? 'Yesterday'
+			: 'Today';
 	}
-	elseif ($difference->days == 1)
-	{
-		return 'Yesterday';
-	}
+
+	$lessThanAYearAgo = $difference->y === 0;
 	
 	$ds = [];
-	if ($difference->m == 1)
+	if ($difference->y === 1)
+	{
+		$ds[] = $difference->y . ' year';
+	}
+	elseif ($difference->y > 1)
+	{
+		$ds[] = $difference->y . ' years';
+	}
+	
+	if ($difference->m === 1)
 	{
 		$ds[] = $difference->m . ' month';
 	}
@@ -150,16 +157,19 @@ function date_difference($postedTime)
 		$ds[] = $difference->m . ' months';
 	}
 	
-	if ($difference->d > 0)
-	{
-		$ds[] = $difference->d . ' days';
+	if ($lessThanAYearAgo){
+		$days = $difference->d + 1;
+		if ($days > 1)
+		{
+			$ds[] = $days . ' days';
+		}
 	}
 	
 	$dateString = implode(', ', $ds) . ' ago';
 	return $dateString;
 }
 
-function nav($limit)
+function nav($limit = 6)
 {
 	//Get posts and sort by modified time (desc)
 	global $posts;
