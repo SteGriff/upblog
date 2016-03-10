@@ -74,7 +74,7 @@ function metadata($filename)
 		];
 		
 		//Encode JSON and save
-		$json = json_encode($info);
+		$json = json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 		$destination = manifest($filename);
 		file_put_contents($destination, $json);
 	}

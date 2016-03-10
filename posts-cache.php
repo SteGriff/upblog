@@ -1,10 +1,10 @@
 <?php $posts = array (
-  1454864475 => 
+  1454865314 => 
   array (
     'file' => 'posts/index.md',
     'link' => 'index',
     'title' => 'Blog Index',
-    'created' => 1454864475,
-    'modified' => 1454864475,
+    'created' => 1454865314,
+    'modified' => 1454865314,
   ),
 );
