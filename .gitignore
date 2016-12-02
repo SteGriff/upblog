@@ -5,6 +5,5 @@
 # ----- SG -----
 # testing files
 /test/*
-/docs/*
 log*.txt
 sgn_*.*
