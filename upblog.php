@@ -293,8 +293,8 @@ function current_url()
 	{
 		//You better hope it's IIS
 		$scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'
-			? 'https'
-			: 'http';
+			? 'https://'
+			: 'http://';
 		
 		return $scheme . $_SERVER['HTTP_HOST'] . $_SERVER['HTTP_X_ORIGINAL_URL'];
 	}
