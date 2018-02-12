@@ -28,3 +28,21 @@ Open `.htaccess` and change the address on the `RewriteRule` line. Two examples 
 ## Upload
 
 Upload the contents of the `upblog` directory that you checked out to your website.
+
+----
+
+## Setup on IIS (Windows 10)
+
+### Setup PHP for IIS on Windows
+
+ * Download [PHP 7](http://windows.php.net/download/) (Use x64 NTS) and unpack to C:\php
+ * New IIS site
+ * Turn on CGI in Windows Features IIS/WWW/App Dev 
+ * In global IIS features settings, make a Handler Mapping.
+ * Also set Default Document for index.php and any others you use
+ * Make sure you've set up hosts file if you're using a local domain (C:\Windows\System32\drivers\etc\hosts)
+ * Try out your site.
+
+### Upblog-specific
+
+If you get 500.19 then you need to install URL Rewrite. In IIS right-bar, click 'Get New Web Platform Components', search for 'rewrite' and install the component. Close and open IIS. Then retry.
